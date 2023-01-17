@@ -27,10 +27,12 @@ conn.video.putSubscription(cam)
 conn.audio.putSubscription(mic)
 
 keystates = {"w": False, "a": False, "s": False, "d": False, "j": False, "k": False}
+robot_speed=0.1
 
 #Publisher for speed commands
 def publisher():
     global keystates
+    global robot_speed
     loop_rate = rospy.Rate(10)
     robot_vel = Twist()
     
@@ -38,23 +40,23 @@ def publisher():
     while True:
         #Forward/back
         if keystates["w"]:
-            robot_vel.linear.x=0.1
+            robot_vel.linear.x=robot_speed
         elif keystates["s"]:
-            robot_vel.linear.x=-0.1
+            robot_vel.linear.x=-robot_speed
         else:
             robot_vel.linear.x=0
         #Left/right
         if keystates["a"]:
-            robot_vel.linear.y=0.1
+            robot_vel.linear.y=robot_speed
         elif keystates["d"]:
-            robot_vel.linear.y=-0.1
+            robot_vel.linear.y=-robot_speed
         else:
             robot_vel.linear.y=0
         #Turn
         if keystates["j"]:
-            robot_vel.linear.z=0.1
+            robot_vel.linear.z=robot_speed
         elif keystates["k"]:
-            robot_vel.linear.z=-0.1
+            robot_vel.linear.z=-robot_speed
         else:
             robot_vel.linear.z=0
 
@@ -64,6 +66,7 @@ def publisher():
 @conn.subscribe
 def onMessage(m):
     global keystates
+    global robot_speed
     #Reading keycodes
     if m["keyCode"] == 87:  # W
         keystates["w"] = m["type"] == "keydown"
@@ -78,10 +81,16 @@ def onMessage(m):
     elif m["keyCode"] == 75:  # K
         keystates["k"] = m["type"] == "keydown"
     
+    #Change speed
+    elif m["keyCode"] == 38 and m["type"] == "keydown":  # Up arrow
+        robot_speed+=0.1
+    elif m["keyCode"] == 40 and m["type"] == "keydown":  # Down arrow
+        robot_speed-=0.1
+    
     #Switch cameras
-    #elif m["keyCode"] == 49:  # 1
+    #elif m["keyCode"] == 49 and m["type"] == "keydown":  # 1
         #conn.video.putSubscription(cam)
-    #elif m["keyCode"] == 50:  # 2
+    #elif m["keyCode"] == 50 and m["type"] == "keydown":  # 2
         #conn.video.putSubscription(cam2)
     
 
