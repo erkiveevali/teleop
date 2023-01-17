@@ -1,12 +1,24 @@
 #!/usr/bin/env python3
 from aiohttp import web
-routes = web.RouteTableDef()
-
 from rtcbot import RTCConnection, CVCamera, Microphone, getRTCBotJS
+
+import rospy
+from geometry_msgs.msg import Twist
+
+import threading
+
+#rospy init
+rospy.init_node("velocity_publisher")
+velocity_pub = rospy.Publisher("cmd_vel", Twist, queue_size=0)
+rospy.sleep(2)
+
+
+#Route table definition
+routes = web.RouteTableDef()
 
 # Create cameras
 cam = CVCamera(cameranumber=0)
-cam2 = CVCamera(cameranumber=2)
+#cam2 = CVCamera(cameranumber=2)
 mic = Microphone()
 
 # 1 global connection
@@ -17,10 +29,35 @@ conn.audio.putSubscription(mic)
 
 keystates = {"w": False, "a": False, "s": False, "d": False}
 
+#Publisher for speed commands
+def publisher():
+    loop_rate = rospy.Rate(10)
+    robot_vel = Twist()
+    
+    global keystates
+
+    while True:
+        #Forward/back
+        if keystates["w"]:
+            robot_vel.linear.x=0.1
+        elif keystates["s"]:
+            robot_vel.linear.x=-0.1
+        else:
+            robot_vel.linear.x=0
+        #Left/right
+        if keystates["a"]:
+            robot_vel.linear.y=0.1
+        elif keystates["d"]:
+            robot_vel.linear.y=-0.1
+        else:
+            robot_vel.linear.y=0
+        
+        velocity_pub.publish(robot_vel)
+        loop_rate.sleep()
+
 @conn.subscribe
 def onMessage(m):
     global keystates
-    
     #WASD control
     if m["keyCode"] == 87:  # W
         keystates["w"] = m["type"] == "keydown"
@@ -32,10 +69,10 @@ def onMessage(m):
         keystates["d"] = m["type"] == "keydown"
     
     #Switch cameras
-    elif m["keyCode"] == 49:  # 1
-        conn.video.putSubscription(cam)
-    elif m["keyCode"] == 50:  # 2
-        conn.video.putSubscription(cam2)
+    #elif m["keyCode"] == 49:  # 1
+        #conn.video.putSubscription(cam)
+    #elif m["keyCode"] == 50:  # 2
+        #conn.video.putSubscription(cam2)
     
     print({
             "forward": keystates["w"] * 1 - keystates["s"] * 1,
@@ -63,6 +100,9 @@ async def index(request):
 
 async def cleanup(app=None):
     await conn.close()
+
+pub_thread = threading.Thread(target=publisher)
+pub_thread.start()
 
 app = web.Application()
 app.add_routes(routes)
