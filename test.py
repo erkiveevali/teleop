@@ -76,9 +76,9 @@ def onMessage(m):
         keystates["a"] = m["type"] == "keydown"
     elif m["keyCode"] == 68:  # D
         keystates["d"] = m["type"] == "keydown"
-    elif m["keyCode"] == 68:  # J
+    elif m["keyCode"] == 74:  # J
         keystates["j"] = m["type"] == "keydown"
-    elif m["keyCode"] == 68:  # K
+    elif m["keyCode"] == 75:  # K
         keystates["k"] = m["type"] == "keydown"
     
     #Switch cameras
