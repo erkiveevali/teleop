@@ -8,7 +8,8 @@
             <h1>RTCBot teleop test</h1>
             <video width= "1280" height="720" autoplay muted playsinline controls></video> <audio autoplay></audio>
             <p>Press 1 and 2 to select camera</p>
-            <p>Use WASD to control the robot</p>
+            <p>Use WASD to move the robot</p>
+            <p>Use JK to turn the robot</p>
             <script>
                 var conn = new rtcbot.RTCConnection();
                 conn.video.subscribe(function(stream) {
