@@ -12,7 +12,6 @@ rospy.init_node("velocity_publisher")
 velocity_pub = rospy.Publisher("cmd_vel", Twist, queue_size=0)
 rospy.sleep(2)
 
-
 #Route table definition
 routes = web.RouteTableDef()
 
@@ -31,9 +30,7 @@ keystates = {"w": False, "a": False, "s": False, "d": False, "j": False, "k": Fa
 
 #Publisher for speed commands
 def publisher():
-    #Global variable for keystates
     global keystates
-    
     loop_rate = rospy.Rate(10)
     robot_vel = Twist()
     
@@ -110,9 +107,11 @@ async def index(request):
 async def cleanup(app=None):
     await conn.close()
 
+#separate thread for publisher function
 pub_thread = threading.Thread(target=publisher)
 pub_thread.start()
 
+#webapp
 app = web.Application()
 app.add_routes(routes)
 app.on_shutdown.append(cleanup)
