@@ -2,7 +2,7 @@
 
 1. Install dependencies from requirements.txt
 ```
-pip install -r requirements.txt
+sudo apt install ...
 ```
 2. Install rtcbot
 ```
