@@ -54,11 +54,11 @@ def publisher():
             robot_vel.linear.y=0
         #Turn
         if keystates["j"]:
-            robot_vel.linear.z=robot_speed
+            robot_vel.angular.z=robot_speed
         elif keystates["k"]:
-            robot_vel.linear.z=-robot_speed
+            robot_vel.angular.z=-robot_speed
         else:
-            robot_vel.linear.z=0
+            robot_vel.angular.z=0
 
         velocity_pub.publish(robot_vel)
         loop_rate.sleep()
@@ -84,7 +84,7 @@ def onMessage(m):
     #Change speed
     elif m["keyCode"] == 38 and m["type"] == "keydown":  # Up arrow
         robot_speed+=0.1
-    elif m["keyCode"] == 40 and m["type"] == "keydown":  # Down arrow
+    elif m["keyCode"] == 40 and m["type"] == "keydown" and robot_speed>0.1:  # Down arrow
         robot_speed-=0.1
     
     #Switch cameras
