@@ -71,7 +71,11 @@ sudo netplan apply
 
 1. Run roscore in separate terminal
 
-2. Check speed values with
+2. Check speed values:
 ```
 rostopic echo cmd_vel
+```
+3. See the simulated robot:
+```
+roslaunch robotont_gazebo gazebo.launch model:=robotont_gazebo_basic
 ```
