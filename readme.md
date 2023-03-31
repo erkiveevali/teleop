@@ -19,6 +19,10 @@ tar -xvzf pyOpenSSL-22.0.0.tar.gz
 
 python3 setup.py install
 ```
+Probably need to install compatible cryptography version as well, v35.0 was compatible
+
+Use pip, if it works or download the tar.gz and follow the same instructions as with pyopenssl
+
  
 3. Network configuration:
 
