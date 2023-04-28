@@ -1,18 +1,16 @@
 <html>
         <head>
-            <title>Teleop test program</title>
+            <title>Teleop</title>
             <script src="/rtcbot.js"></script>
-            <link rel="stylesheet" type="text/css" href={% static "styles.css" %}/>
         </head>
         <body style="background-color: powderblue; padding-top: 30px; text-align: center;">
-            <h1>RTCBot teleop test</h1>
+            <h1 style="font-family:verdana;">RTCBot Teleoperation Interface</h1>
             <video width= "1280" height="720" autoplay muted playsinline controls></video> <audio autoplay></audio>
-            
+            <h3 style="font-family:verdana;">Instructions:</h3>
             <p>Use WASD to move the robot</p>
             <p>Use JK to turn the robot</p>
             <p>Use up/down arrow keys to change speed</p>
-            
-            <p>Press 1 and 2 to select camera - not working now</p>
+            <p>Press 1 and 2 to select camera</p>
             <script>
                 var conn = new rtcbot.RTCConnection();
                 conn.video.subscribe(function(stream) {
