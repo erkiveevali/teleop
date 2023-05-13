@@ -66,7 +66,7 @@ sudo netplan apply
 
 ## Use:
 
-1. Run python script (test-ros.py)
+1. Run python script (teleop.py)
 
 2. Go to 192.168.200.XY:8080 on a browser
 
